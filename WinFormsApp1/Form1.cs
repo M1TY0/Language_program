@@ -12,17 +12,17 @@ namespace WinFormsApp1
         int num = 0;
         int times = 0;
         int points = 0;
-        int count = 0;
+        
         private void button1_Click(object sender, EventArgs e)
         {
             if (times == 0)
             {
                 Random rnd = new Random();
-                num = rnd.Next(count);
+                num = rnd.Next(Numbier()-1);
                 string word1 = Word(num);
                 while(Getnums(word1) == 10)
                 {
-                    num = rnd.Next(count);
+                    num = rnd.Next(Numbier() - 1);
                     word1 = Word(num);
                 }
                 textBox1.Text = word1;
@@ -37,11 +37,11 @@ namespace WinFormsApp1
                 if (Getprevod(word) == word1)
                 {
                     Random rnd = new Random();
-                    num = rnd.Next(count);
+                    num = rnd.Next(Numbier() - 1);
                     string word2 = Word(num);
                     while (Getnums(word2) == 10)
                     {
-                        num = rnd.Next(count);
+                        num = rnd.Next(Numbier() - 1);
                         word1 = Word(num);
                     }
                     textBox1.Text = word2;
@@ -55,11 +55,11 @@ namespace WinFormsApp1
                 else
                 {
                     Random rnd = new Random();
-                    num = rnd.Next(count);
+                    num = rnd.Next(Numbier() - 1);
                     string word2 = Word(num);
                     while (Getnums(word2) == 10)
                     {
-                        num = rnd.Next(count);
+                        num = rnd.Next(Numbier() - 1);
                         word1 = Word(num);
                     }
                     textBox1.Text = word2;
@@ -72,12 +72,17 @@ namespace WinFormsApp1
         }
         private void Form1_Load(object sender, EventArgs e)
         {    
+            
+        }
+        public int Numbier ()
+        {
             MySqlConnection conn = new MySqlConnection(connection);
             conn.Open();
             string query = "Select Count(id) from word";
             MySqlCommand cmd = new MySqlCommand(query, conn);
-            count = Convert.ToInt32(cmd.ExecuteScalar());
+            int count = Convert.ToInt32(cmd.ExecuteScalar());
             conn.Close();
+            return count;
         }
         public string Word(int n)
         {  
