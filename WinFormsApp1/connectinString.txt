@@ -1,1 +1,0 @@
-SERVER=localhost; DATABASE = words; UID = root; PASSWORD = 1234; 
