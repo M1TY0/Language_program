@@ -1,4 +1,4 @@
-using MySqlConnector;
+ï»¿using MySqlConnector;
 using MySql.Data.Common;
 using System.Reflection.Metadata.Ecma335;
 using Org.BouncyCastle.Asn1.X500;
@@ -7,28 +7,39 @@ namespace WinFormsApp1
 {
     public partial class Form1 : Form
     {
+        public Form1()
+        {
+            InitializeComponent();
+        }
         string connection = File.ReadAllText("\\codes\\project\\Language\\WinFormsApp1\\connectinString.txt");
         int nums = 0;
-        int num = 0;
+        
         int times = 0;
         int points = 0;
         
         private void button1_Click(object sender, EventArgs e)
         {
+            MySqlConnection conn = new MySqlConnection(connection);
+            conn.Open();
+            string query = "Select Count(id) from word";
+            MySqlCommand cmd = new MySqlCommand(query, conn);
+            int count = Convert.ToInt32(cmd.ExecuteScalar());
+            conn.Close();
+            int num = 0;
             if (times == 0)
             {
                 Random rnd = new Random();
-                num = rnd.Next(Numbier()-1);
+                num = rnd.Next(count);
                 string word1 = Word(num);
-                while(Getnums(word1) == 10)
+                while (Getnums(word1) == 10)
                 {
-                    num = rnd.Next(Numbier() - 1);
+                    num = rnd.Next(count);
                     word1 = Word(num);
                 }
                 textBox1.Text = word1;
                 times++;
                 label1.Text = points.ToString();
-                button1.Text = "Ïðîâåðè";
+                button1.Text = "continue";
             }
             else
             {
@@ -37,11 +48,11 @@ namespace WinFormsApp1
                 if (Getprevod(word) == word1)
                 {
                     Random rnd = new Random();
-                    num = rnd.Next(Numbier() - 1);
+                    num = rnd.Next(count);
                     string word2 = Word(num);
                     while (Getnums(word2) == 10)
                     {
-                        num = rnd.Next(Numbier() - 1);
+                        num = rnd.Next(count);
                         word1 = Word(num);
                     }
                     textBox1.Text = word2;
@@ -55,11 +66,11 @@ namespace WinFormsApp1
                 else
                 {
                     Random rnd = new Random();
-                    num = rnd.Next(Numbier() - 1);
+                    num = rnd.Next(count);
                     string word2 = Word(num);
                     while (Getnums(word2) == 10)
                     {
-                        num = rnd.Next(Numbier() - 1);
+                        num = rnd.Next(count);
                         word1 = Word(num);
                     }
                     textBox1.Text = word2;
@@ -71,21 +82,11 @@ namespace WinFormsApp1
             }
         }
         private void Form1_Load(object sender, EventArgs e)
-        {    
+        {
             
         }
-        public int Numbier ()
-        {
-            MySqlConnection conn = new MySqlConnection(connection);
-            conn.Open();
-            string query = "Select Count(id) from word";
-            MySqlCommand cmd = new MySqlCommand(query, conn);
-            int count = Convert.ToInt32(cmd.ExecuteScalar());
-            conn.Close();
-            return count;
-        }
         public string Word(int n)
-        {  
+        {
             MySqlConnection conn = new MySqlConnection(connection);
             conn.Open();
             string query = "select (word) from word where id = " + n;
@@ -96,7 +97,7 @@ namespace WinFormsApp1
         }
         public string Getprevod(string f)
         {
-            string otg;           
+            string otg;
             MySqlConnection conn = new MySqlConnection(connection);
             conn.Open();
             string query = "select (prevod) from word where word = '" + f + "'";
@@ -107,24 +108,24 @@ namespace WinFormsApp1
         }
         public int Getnums(string f)
         {
-            int otg;            
+            int otg;
             MySqlConnection conn = new MySqlConnection(connection);
             conn.Open();
-            string query = "select (num) from word where word = '" + f + "'";
+            string query = "select (nums) from word where word = '" + f + "'";
             MySqlCommand cmd = new MySqlCommand(query, conn);
             otg = int.Parse(Convert.ToString(cmd.ExecuteScalar()));
             conn.Close();
             return otg;
         }
-        public void Setnums(string f,int j)
+        public void Setnums(string f, int j)
         {
-            int otg;
+            
             MySqlConnection conn = new MySqlConnection(connection);
             conn.Open();
-            string query = "update word set nums="+j+" where word = '" + f + "'";
+            string query = "update word set nums=" + j + " where word = '" + f + "'";
             MySqlCommand cmd = new MySqlCommand(query, conn);
-            otg = int.Parse(Convert.ToString(cmd.ExecuteScalar()));
+            cmd.ExecuteScalar();
             conn.Close();
         }
     }
-}
+} 

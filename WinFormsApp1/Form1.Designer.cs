@@ -89,5 +89,9 @@
         private TextBox textBox2;
         private Button button1;
         private Label label1;
+        private TextBox textBox3;
+        private TextBox textBox4;
+        private Button button2;
+        private Label label2;
     }
 }
